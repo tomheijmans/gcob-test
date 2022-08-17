@@ -13,7 +13,7 @@ namespace Rabobank.TechnicalTest.GCOB.Repositories
         private ConcurrentDictionary<int, CountryDto> Countries { get; } = new ConcurrentDictionary<int, CountryDto>();
         private ILogger _logger;
 
-        public InMemoryCountryRepository(ILogger logger)
+        public InMemoryCountryRepository(ILogger<InMemoryCountryRepository> logger)
         {
             _logger = logger;
             Countries.TryAdd(1, new CountryDto { Id = 1, Name = "Netherlands" });

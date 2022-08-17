@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rabobank.TechnicalTest.GCOB.Repositories;
+using Rabobank.TechnicalTest.GCOB.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,12 @@ namespace Rabobank.TechnicalTest.GCOB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ICustomerRepository, InMemoryCustomerRepository>();
-            services.AddScoped<ICountryRepository, InMemoryCountryRepository>();
+            services.AddLogging();
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddSingleton<ICustomerRepository, InMemoryCustomerRepository>();
+            services.AddSingleton<IAddressRepository, InMemoryAddressRepository>();
+            services.AddSingleton<ICountryRepository, InMemoryCountryRepository>();
             
             services.AddControllers();
         }

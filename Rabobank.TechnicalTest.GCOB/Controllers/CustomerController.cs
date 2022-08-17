@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Rabobank.TechnicalTest.GCOB.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rabobank.TechnicalTest.GCOB.Controllers
@@ -12,22 +11,30 @@ namespace Rabobank.TechnicalTest.GCOB.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ILogger<CustomerController> _logger;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(ILogger<CustomerController> logger)
+        public CustomerController(ILogger<CustomerController> logger
+            , ICustomerService customerService)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         }
 
         [HttpGet]
-        public IEnumerable<Customer> Get()
+        [Route("{identifier}")]
+        public async Task<Customer> Get(int identifier)
         {
-            throw new NotImplementedException();
+            return await _customerService.GetAsync(identifier);
         }
 
         [HttpPost]
-        public Customer Post()
+        public async Task<Customer> Post(Customer customer)
         {
-            throw new NotImplementedException();
+            if (customer is null)
+            {
+                throw new System.Web.Http.HttpResponseException(System.Net.HttpStatusCode.BadRequest);
+            }
+            return await _customerService.InsertAsync(customer);
         }
     }
 }
